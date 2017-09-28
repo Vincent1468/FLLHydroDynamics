@@ -9,20 +9,16 @@ namespace FLLMissies.Missions
 	{
 		public string Name { get; } = "Missie 1";
 
-		private Vehicle _vehicle;
-		private Hefvork _hefVork;
+		private VehiclePrecise _vehicle;
 
 		public Mission1 ()
 		{
-			_vehicle = new Vehicle (Constants.MOTOR_LEFT_PORT, Constants.MOTOR_RIGHT_PORT);
-			_hefVork = new Hefvork (Constants.HEFVORK_MOTOR_PORT, Constants.HEFVORK_STOP_SENSOR_PORT);
+			_vehicle = new VehiclePrecise ();
 
 		}
 
 		public void Step1() {
-			_vehicle.Backward (-50);
-			Thread.Sleep (1000);
-			_vehicle.Brake ();
+			_vehicle.Forward (50, 45);
 		}
 	}
 }

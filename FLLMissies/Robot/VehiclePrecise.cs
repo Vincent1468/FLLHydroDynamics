@@ -22,7 +22,38 @@ namespace FLLMissies.Robot
 			_gyroSensor = new EV3GyroSensor (Constants.GYRO_PORT, GyroMode.Angle);
 		}
 
+		public void fwTach(sbyte speed, int maxTachoCount) {
+			_leftMotor.ResetTacho ();
+			_rightMotor.ResetTacho ();
+
+			_leftMotor.ResetTacho ();
+			_rightMotor.ResetTacho ();
+
+			_leftMotor.SetSpeed (speed);
+			_rightMotor.SetSpeed (speed);
+
+			while (_leftMotor.GetTachoCount () < maxTachoCount && _rightMotor.GetTachoCount () < maxTachoCount) {
+				// Running
+			}
+
+			_leftMotor.Off ();
+			_rightMotor.Off ();	
+		}
+
+		public void fwPID(sbyte speed) {
+		
+			// http://www.monobrick.dk/forums/topic/controlling-the-engine/
+			// Laatste post ^
+			// https://www.smallrobots.it/the-pid-controller-part-4-of-4/
+
+			using (var pid = new PositionPID(_leftMotor, 0, true, speed, 
+
+		
+		}
+
 		public void Forward(sbyte speed, int ms) {
+			_gyroSensor.Reset ();
+
 			int degrees = getCurrentDegrees ();
 
 			CurrentLogger.Logger.debug ($"fwd: s:{speed} d:{degrees}");
@@ -32,8 +63,8 @@ namespace FLLMissies.Robot
 
 			for (int i = 0; i < ms; i++) {
 				int curDegrees = getCurrentDegrees ();
-
-				if (curDegrees != degrees) {
+				CurrentLogger.Logger.debug (i.ToString ());
+				if (curDegrees >= (degrees + 1 ) || curDegrees <= (degrees - 1 ) ) {
 					// Vehicle turned!
 					CurrentLogger.Logger.debug ($"fwd corr: do:{degrees} cd: {curDegrees}");
 					if (curDegrees < degrees) { // Left?
@@ -63,8 +94,8 @@ namespace FLLMissies.Robot
 			}
 
 
-			_leftMotor.Brake ();
-			_rightMotor.Brake ();
+			_leftMotor.Off ();
+			_rightMotor.Off ();
 		}
 
 		public void Backward(sbyte speed, int ms) {
@@ -74,15 +105,17 @@ namespace FLLMissies.Robot
 			Forward (speed, ms); // Same as forward, only with a negative speed
 		}
 
-		public void Left(int degrees, sbyte speed = 100) {
+		public void Left(int degrees, sbyte speed = 10) {
+			_gyroSensor.Reset ();
+
 			sbyte negativeSpeed = convertSpeedToNegative (speed);
 
 			int startDegrees = getCurrentDegrees ();
 
 			CurrentLogger.Logger.debug ($"left: d:{degrees} sd:{startDegrees}");
 
-			_leftMotor.SetSpeed (negativeSpeed);
-			_rightMotor.SetSpeed (speed);
+			_rightMotor.SetSpeed (negativeSpeed);
+			_leftMotor.SetSpeed (speed);
 
 			bool turning = true;
 			int differenceDegrees = 0;
@@ -92,23 +125,27 @@ namespace FLLMissies.Robot
 
 				CurrentLogger.Logger.debug ($"diff: {differenceDegrees}");
 
-				if (degrees >= differenceDegrees)
+				if (degrees <= differenceDegrees)
 					turning = false;
 			}
 
-			_leftMotor.Brake ();
-			_rightMotor.Brake ();
+			_leftMotor.Off ();
+			_rightMotor.Off ();
+		}
+
+		public void Stop() {
+			_leftMotor.Off ();
+			_rightMotor.Off ();
 		}
 
 		private int getCurrentDegrees() {
+
 			return _gyroSensor.Read ();
 		}
 
 		private sbyte convertSpeedToNegative(sbyte speed) {
+			int newSpeed = speed * -1;
 		
-			if (speed > 0) {
-				// Bron: https://stackoverflow.com/questions/1348080/convert-a-positive-number-to-negative-in-c-sharp
-				int newSpeed = speed * -1;
 
 				if (newSpeed > sbyte.MaxValue) {
 					newSpeed = sbyte.MaxValue;
@@ -116,8 +153,9 @@ namespace FLLMissies.Robot
 					newSpeed = sbyte.MinValue;
 				}
 
-				return (sbyte)newSpeed;
-			}
+
+
+			return (sbyte)newSpeed;
 		}
 	}
 }
