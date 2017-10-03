@@ -51,6 +51,7 @@
     <Compile Include="Missions\Mission1.cs" />
     <Compile Include="Missions\Mission1Failed.cs" />
     <Compile Include="Missions\TestMission.cs" />
+    <Compile Include="Robot\VehicleTacho.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

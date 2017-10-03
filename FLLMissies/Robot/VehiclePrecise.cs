@@ -40,16 +40,6 @@ namespace FLLMissies.Robot
 			_rightMotor.Off ();	
 		}
 
-		public void fwPID(sbyte speed) {
-		
-			// http://www.monobrick.dk/forums/topic/controlling-the-engine/
-			// Laatste post ^
-			// https://www.smallrobots.it/the-pid-controller-part-4-of-4/
-
-			using (var pid = new PositionPID(_leftMotor, 0, true, speed, 
-
-		
-		}
 
 		public void Forward(sbyte speed, int ms) {
 			_gyroSensor.Reset ();
