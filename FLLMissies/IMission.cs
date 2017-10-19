@@ -6,6 +6,6 @@ namespace FLLMissies
 	{
 		string Name { get; }
 			
-		void Step1();
+		void Run();
 	}
 }

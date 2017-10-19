@@ -12,8 +12,6 @@ using FLLMissies.Robot;
 
 namespace FLLMissies
 {
-	// Start een webserver voor het besturen van de robot
-	//
 	// Bron voor delen van deze code:
 	// http://www.monobrick.dk/forums/topic/webserver/#post-5164
 	public class MissionDevelopment
@@ -108,26 +106,6 @@ namespace FLLMissies
 					return true;
 				case "/hefvork/up":
 					RobotControl.Hefvork.MoveUp(Convert.ToInt32 (parameters.Get ("precent")));
-					return true;
-
-				case "/mission1":
-					new Missions.Mission1().Run();
-					return true;
-
-				case "/mission2":
-					new Missions.Mission2().Run();
-					return true;
-
-				case "/mission3":
-					new Missions.Mission3().Run();
-					return true;
-
-				case "/mission4":
-					new Missions.Mission4().Run();
-					return true;
-
-				case "/mission5":
-					new Missions.Mission5().Run();
 					return true;
 				}
 			} catch (Exception e) {

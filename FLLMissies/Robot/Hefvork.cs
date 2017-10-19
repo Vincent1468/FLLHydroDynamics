@@ -15,9 +15,9 @@ namespace FLLMissies.Robot
 		const sbyte SPEED_DOWN = 100;
 		const int MS_TIME_DOWN = 2700; // Time in ms untill the arm is down
 
-		public Hefvork(MotorPort hefMotorPort, SensorPort limitSensorPort) {
-			_hefMotor = new Motor (hefMotorPort);
-			_limitSensor = new EV3TouchSensor (limitSensorPort);		
+		public Hefvork() {
+			_hefMotor = new Motor (Constants.HEFVORK_MOTOR_PORT);
+			_limitSensor = new EV3TouchSensor (Constants.HEFVORK_STOP_SENSOR_PORT);		
 		}
 
 

@@ -2,7 +2,7 @@
 
 namespace FLLMissies.Logging
 {
-	public class DummyLogger
+	public class DummyLogger : ILogger
 	{
 		public void info(string message) {
 		}

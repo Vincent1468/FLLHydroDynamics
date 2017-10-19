@@ -17,17 +17,23 @@ namespace MonoBrickHelloWorld
 		public static void Main (string[] args)
 		{
 
-			/*MissionDevelopment dev = new MissionDevelopment ();
+			var vp = new VehiclePrecise ();
+
+			vp.Forward (50, 2000);
+
+			return;
+			MissionDevelopment dev = new MissionDevelopment ();
 			dev.Start ();
 
-			return;*/
+			return;
 
-			IMission[] missions = { new Mission1 (), new Mission2(), new Mission3(), new Mission4(), new Mission5() };
+			IMission[] missions = { new Mission1 () };
 
 			foreach (var mission in missions) {
-				CurrentLogger.Logger.info (mission.Name);
-				mission.Run ();
+				CurrentLogger.Logger.info ($"Starting mission {mission.Name}");
+				MissionRunner.Run (mission);
 			}
+
 
 
 		}

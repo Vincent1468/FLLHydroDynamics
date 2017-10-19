@@ -12,13 +12,14 @@ using FLLMissies.Robot;
 
 namespace FLLMissies
 {
-	// Start een webserver voor het besturen van de robot
-	//
 	// Bron voor delen van deze code:
 	// http://www.monobrick.dk/forums/topic/webserver/#post-5164
 	public class MissionDevelopment
 	{
 		private readonly HttpListener _httpListener;
+		private readonly Vehicle _vehicle;
+		private readonly VehiclePrecise _vehiclePrecise;
+		private readonly Hefvork _hefVork;
 		private bool _running = false;
 
 		private string RootPath
@@ -35,6 +36,10 @@ namespace FLLMissies
 		{
 			_httpListener = new HttpListener ();
 			_httpListener.Prefixes.Add("http://*:8080/");
+
+			_vehicle = new Vehicle (Constants.MOTOR_LEFT_PORT, Constants.MOTOR_RIGHT_PORT); 
+			_hefVork = new Hefvork(Constants.HEFVORK_MOTOR_PORT, Constants.HEFVORK_STOP_SENSOR_PORT);
+			_vehiclePrecise = new VehiclePrecise ();
 		}
 
 		public void Start() {
@@ -82,52 +87,52 @@ namespace FLLMissies
 			try {
 				switch (requestPath) {
 				case "/motor/forward":
-					RobotControl.Movement.Forward (Convert.ToUInt32(parameters.Get ("steps")));
+					_vehiclePrecise.Forward (Convert.ToSByte (parameters.Get ("speed")), Convert.ToUInt32(parameters.Get ("steps")));
 					return true;
 				case "/motor/backward":
-					RobotControl.Movement.Backward (Convert.ToUInt32(parameters.Get ("steps")));
+					_vehiclePrecise.Backward (Convert.ToSByte (parameters.Get ("speed")), Convert.ToUInt32(parameters.Get ("steps")));
 					return true;
 				case "/motor/left":
-					RobotControl.Movement.Left (Convert.ToInt32(parameters.Get ("degrees")));
+					_vehicle.SpinLeft (Convert.ToSByte (parameters.Get ("speed")), Convert.ToUInt32(parameters.Get ("degrees")), true);
 					return true;
 				case "/motor/right":
-					RobotControl.Movement.Right (Convert.ToInt32(parameters.Get ("degrees")));
+					_vehicle.SpinRight (Convert.ToSByte (parameters.Get ("speed")), Convert.ToUInt32(parameters.Get ("degrees")), true);
 					return true;
 				case "/motor/brake":
-					RobotControl.Movement.Brake();
+					_vehicle.Brake ();
+					return true;
+				case "/motor/leftforward":
+					_vehicle.TurnLeftForward(Convert.ToSByte (parameters.Get ("speed")), Convert.ToSByte (parameters.Get ("turnPrecent")));
+					Thread.Sleep (Convert.ToInt32 (parameters.Get ("delay")));
+					_vehicle.Brake ();
+					return true;
+				case "/motor/leftbackward":
+					_vehicle.TurnLeftReverse(Convert.ToSByte (parameters.Get ("speed")), Convert.ToSByte (parameters.Get ("turnPrecent")));
+					Thread.Sleep (Convert.ToInt32 (parameters.Get ("delay")));
+					_vehicle.Brake ();
+					return true;
+				case "/motor/rightforward":
+					_vehicle.TurnRightForward(Convert.ToSByte (parameters.Get ("speed")), Convert.ToSByte (parameters.Get ("turnPrecent")));
+					Thread.Sleep (Convert.ToInt32 (parameters.Get ("delay")));
+					_vehicle.Brake ();
+					return true;
+				case "/motor/rightbackward":
+					_vehicle.TurnRightReverse(Convert.ToSByte (parameters.Get ("speed")), Convert.ToSByte (parameters.Get ("turnPrecent")));
+					Thread.Sleep (Convert.ToInt32 (parameters.Get ("delay")));
+					_vehicle.Brake ();
 					return true;
 
 				case "/hefvork/reset":
-					RobotControl.Hefvork.Reset();
+					_hefVork.Reset();
 					return true;
 				case "/hefvork/fullyDown":
-					RobotControl.Hefvork.MoveDown(Convert.ToInt32 (parameters.Get ("precent")));
+					_hefVork.MoveDown(Convert.ToInt32 (parameters.Get ("precent")));
 					return true;
 				case "/hefvork/down":
-					RobotControl.Hefvork.MoveDown(Convert.ToInt32 (parameters.Get ("precent")));
+					_hefVork.MoveDown(Convert.ToInt32 (parameters.Get ("precent")));
 					return true;
 				case "/hefvork/up":
-					RobotControl.Hefvork.MoveUp(Convert.ToInt32 (parameters.Get ("precent")));
-					return true;
-
-				case "/mission1":
-					new Missions.Mission1().Run();
-					return true;
-
-				case "/mission2":
-					new Missions.Mission2().Run();
-					return true;
-
-				case "/mission3":
-					new Missions.Mission3().Run();
-					return true;
-
-				case "/mission4":
-					new Missions.Mission4().Run();
-					return true;
-
-				case "/mission5":
-					new Missions.Mission5().Run();
+					_hefVork.MoveUp(Convert.ToInt32 (parameters.Get ("precent")));
 					return true;
 				}
 			} catch (Exception e) {

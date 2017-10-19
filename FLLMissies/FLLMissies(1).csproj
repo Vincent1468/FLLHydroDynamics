@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
+    <Compile Include="MissionRunner.cs" />
     <Compile Include="IMission.cs" />
     <Compile Include="MissionDevelopment.cs" />
     <Compile Include="Logging\ILogger.cs" />
@@ -46,14 +47,11 @@
     <Compile Include="Logging\CurrentLogger.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Robot\Hefvork.cs" />
-    <Compile Include="Missions\TestMission.cs" />
-    <Compile Include="Robot\Movement.cs" />
-    <Compile Include="Robot\RobotControl.cs" />
+    <Compile Include="Robot\VehiclePrecise.cs" />
     <Compile Include="Missions\Mission1.cs" />
-    <Compile Include="Missions\Mission2.cs" />
-    <Compile Include="Missions\Mission3.cs" />
-    <Compile Include="Missions\Mission4.cs" />
-    <Compile Include="Missions\Mission5.cs" />
+    <Compile Include="Missions\Mission1Failed.cs" />
+    <Compile Include="Missions\TestMission.cs" />
+    <Compile Include="Robot\VehicleTacho.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
